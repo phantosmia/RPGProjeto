@@ -8,10 +8,13 @@ public class GameStateManager {
 	private int currentState;
 	public static final int MENUSTATE = 0;
 	public static final int LEVEL1STATE = 1;
-	public GameStateManager(){
+	public GamePanel gamePanel;
+	public GameStateManager(GamePanel gamePanel){
 		gameStates = new GameState[NUMGAMESTATES];
 		currentState = MENUSTATE;
 		loadState(currentState);
+		this.gamePanel = gamePanel;
+		//System.out.println(this.gamePanel);
 		//gameStates.add(new MenuState(this));
 		//gameStates.add(new Level1State(this));
 		
@@ -21,7 +24,7 @@ public class GameStateManager {
 			gameStates[state] = new MenuState(this);
 		}
 		if(state == LEVEL1STATE){
-			gameStates[state] = new Map1State(this);
+			gameStates[state] = new Map1State(this, gamePanel);
 		}
 		
 	}

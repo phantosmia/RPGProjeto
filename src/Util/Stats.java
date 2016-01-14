@@ -12,6 +12,7 @@ public class Stats {
 	public static final int MAX_LEVEL = 99;
 	public static final  int MAX_XP = 999999;
 	private StatScale scale;
+	protected double moveSpeed;
 	public static final double LEVEL_CONST = (double)MAX_XP/((double)MAX_LEVEL * (double)MAX_LEVEL);
 //	public static final double LEVEL_CONST = 25.0 * Math.pow(3.0, (3.0 / 2.0));
 	public Stats(float xp, boolean levelable){
@@ -46,9 +47,12 @@ public class Stats {
 		//return 10;
 		return (int)(getLevel() * scale.getScale(StatScale.VITALITY) * 10);
 	}
-	public float getSpeed() {
-		return 4f;
+	public double getSpeed() {
+		return moveSpeed;
 		//return (float)(getLevel() * (float)(scale.getScale(StatScale.SPEED)));
+	}
+	public void setMovieSpeed(double speed){
+		this.moveSpeed = speed;
 	}
 	public int getCurrentHealth() {
 		int max = getMaxHealth();

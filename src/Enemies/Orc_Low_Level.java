@@ -1,35 +1,36 @@
-package User;
-import java.awt.Graphics2D;
+package Enemies;
+
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import Util.StatObject;
-import engine.MapObject;
+import User.Animation;
 
-public class Player extends StatObject{
-	
+public class Orc_Low_Level extends Enemy{
 	public int currentAction;
 	private static final int IDLE = 0;
 	private static final int WALKINGRIGHT = 2;
 	private static final int WALKINGLEFT = 1;
 	private static final int WALKINGDOWN = 0;
 	private static final int WALKINGUP = 3;
-	
+
 	private ArrayList<BufferedImage[]> sprites;
 	private final int[] numFrames = { 3, 3, 3, 3, // numero de quadros q
 			// cada animacao
 			// possui
-	
-};
-	public Player(){
+	};
+	public Orc_Low_Level(int level) {
+		super(level);
+		setMoveSpeed(1);
+		// TODO Auto-generated constructor stub
 		width = 32;
 		height = 32;
-		setType(2);
+		damage = 2;
+		sightRange = 80f;
 		try {
 			BufferedImage spritesheet = ImageIO
-					.read(getClass().getResourceAsStream("/Characters/beren.png"));
+					.read(getClass().getResourceAsStream("/Enemies/orc_low_level.png"));
 			sprites = new ArrayList<BufferedImage[]>();
 			for (int i = 0; i < 4; i++) {
 				BufferedImage[] bi = new BufferedImage[numFrames[i]];
@@ -48,28 +49,33 @@ public class Player extends StatObject{
 		animation.setFrames(sprites.get(WALKINGDOWN));
 		animation.setDelay(500);
 	}
-	
-	public void draw(Graphics2D g){
-		
-		super.draw(g);
-	}
-	private void getNextPosition() {
+	private void getNextPosition(){
 		if(left){
-			x -= 1;
+			x -= getSpeed();
+			
 		}
-		if(right){
-			x += 1;
-		}
-		if(down){
-			y += 1;
+		else if(right){
+			x += getSpeed();
+			
 		}
 		if(up){
-			y -= 1;
+			y -= getSpeed();
+			
+		}
+		else if(down){
+			y += getSpeed();
+			
 		}
 	}
 	public void update(){
 		getNextPosition();
-		setPosition(x,y);
+		if (target == null)
+			look();
+		else {
+			//if((x != target.getX() + 32 || y != target.getY() + 32) )
+				chase();
+		}
+		
 		if (left){
 			if (currentAction != WALKINGLEFT) {
 				currentAction = WALKINGLEFT;
@@ -77,7 +83,7 @@ public class Player extends StatObject{
 				animation.setDelay(160);
 				width = 30;
 			
-				//System.out.println(x);
+				System.out.println(x);
 				}
 		}
 		else if (right){
@@ -86,7 +92,6 @@ public class Player extends StatObject{
 				animation.setFrames(sprites.get(WALKINGRIGHT));
 				animation.setDelay(160);
 				width = 30;	
-				//System.out.println(x);
 				}
 		}
 		else if (up){
@@ -116,7 +121,11 @@ public class Player extends StatObject{
 				width = 30;
 			}
 		}
+		
 		animation.update();
+		up = false;
+		down = false;
+		left = false;
+		right = false;
 	}
-	
 }

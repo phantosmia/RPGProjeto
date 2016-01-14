@@ -1,8 +1,8 @@
 package Util;
 
+import engine.MapObject;
 
-
-public class StatObject  {
+public class StatObject  extends MapObject{
 	protected Stats stats;
 	public void damage(int amt){
 		stats.damage(amt);
@@ -16,8 +16,11 @@ public class StatObject  {
 	public int getLevel() {
 	 return stats.getLevel();
 	}
-	public float getSpeed() {
+	public double getSpeed() {
 	 return stats.getSpeed();
+	}
+	public void setMoveSpeed(double speed){
+		stats.setMovieSpeed(speed);
 	}
 	public int getMaxHealth() {
 		return stats.getMaxHealth();

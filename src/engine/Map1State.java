@@ -2,8 +2,10 @@ package engine;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
-
+import Enemies.Enemy;
+import Enemies.Orc_Low_Level;
 import User.Player;
 import graphics.Background;
 
@@ -11,17 +13,29 @@ import graphics.Background;
 
 public class Map1State extends GameState{
 	public Player player;
+	private ArrayList<Enemy> enemies;
 	private Background bg;
-	public Map1State(GameStateManager gsm) {
+	public GamePanel gamePanel;
+	public Map1State(GameStateManager gsm, GamePanel gamePanel) {
 		this.gsm = gsm;
+		
+	
+		this.gamePanel = gamePanel;
 		init();
 	}
 	
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
+		Orc_Low_Level littleOrc;
+		littleOrc = new Orc_Low_Level(1);
+		enemies = new ArrayList<Enemy>();
 		player = new Player();
 		player.setPosition(100,100);
+		littleOrc.setPosition(300, 100);
+		gamePanel.addObject(littleOrc);
+		gamePanel.addObject(player);
+		enemies.add(littleOrc);
 		bg = new Background("/Backgrounds/backgroundTBL.jpg",0.1);
 		
 	}
@@ -29,16 +43,27 @@ public class Map1State extends GameState{
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
+		
 		player.update();
-		//bg.update();
+		for(int i = 0; i < enemies.size(); i++){
+			Enemy e = enemies.get(i);
+			e.update();
+			
+			}
 		
 	}
+		//bg.update();
+		
+	
 
 	@Override
 	public void draw(Graphics2D g) {
 		// TODO Auto-generated method stub
 		bg.draw(g);
 		player.draw(g);
+		for(int i = 0; i < enemies.size(); i++){
+			enemies.get(i).draw(g);
+		}
 		
 	}
 
