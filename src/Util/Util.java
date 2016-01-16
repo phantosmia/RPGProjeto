@@ -1,12 +1,12 @@
 package Util;
 
-
+import engine.MapObject;
 
 public class Util {
-	public static boolean lineOfSight(GameObject go1, GameObject  go2){
+	public static boolean lineOfSight(MapObject go1, MapObject  go2){
 		return true;
 	}
-	public static float dist(float x1, float y1, float x2, float y2){
+	public static float dist(double x1, double y1, double x2, double y2){
 		double x = x2 - x1;
 		double y = y2 - y1;
 		return (float) Math.sqrt((x * x) + (y * y));

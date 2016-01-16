@@ -63,8 +63,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
 		g = (Graphics2D) image.getGraphics();
 		running = true;
 		gsm = new GameStateManager(game);
-		System.out.println(objects);
-		
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {

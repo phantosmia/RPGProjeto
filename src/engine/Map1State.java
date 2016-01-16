@@ -28,7 +28,7 @@ public class Map1State extends GameState{
 	public void init() {
 		// TODO Auto-generated method stub
 		Orc_Low_Level littleOrc;
-		littleOrc = new Orc_Low_Level(1);
+		littleOrc = new Orc_Low_Level(0);
 		enemies = new ArrayList<Enemy>();
 		player = new Player();
 		player.setPosition(100,100);
@@ -70,6 +70,7 @@ public class Map1State extends GameState{
 	@Override
 	public void keyPressed(int k) {
 		// TODO Auto-generated method stub
+		if(player.isDead == false){
 		if(k == KeyEvent.VK_LEFT){
 			player.setLeft(true);
 		}
@@ -83,6 +84,7 @@ public class Map1State extends GameState{
 		
 		if(k == KeyEvent.VK_DOWN){
 			player.setDown(true);
+		}
 		}
 		
 	}

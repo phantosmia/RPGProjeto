@@ -1,40 +1,48 @@
 package Enemies;
-
-
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
-
+import javax.imageio.ImageIO;
+import Mobs.Creature;
 import Util.StatObject;
 import Util.Stats;
-import Util.Time;
+import engine.Delay;
 import engine.GamePanel;
 import engine.MapObject;
-
-
-
-public class Enemy extends StatObject{
+public class Enemy extends Creature{
 	protected float sightRange;
-	private float ATTACK_RANGE;
+	protected float ATTACK_RANGE;
 	protected StatObject target;
 	protected int damage;
 	double xDirecional;
 	double yDirecional;
+	protected Delay attackDelay;
+	int tempDirection = 0;
 	public static final float DAMPING = 0.5f;
-	private int attackDamage;
+	protected int attackDamage;
 	public int type;
 	public Enemy(int level) {
-		stats = new Stats(0, false);
 		target = null;
-		attackDamage = 1;
-		ATTACK_RANGE = 48f;
-		
-		setMoveSpeed(3);
+		deadSprite = new BufferedImage[1];
+		stats = new Stats(0, false);
 		setType(3);
+		font = new Font("Arial", Font.PLAIN, 12);
+		titleColor = new Color(128, 0, 0);
+		titleFont = new Font("Century Gothic", Font.PLAIN, 12);
+		try {
+			deadSprite[0] = ImageIO.read(getClass().getResourceAsStream("/Characters/gravestone.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public void update(){
-		
+		super.update();
 	}
-	protected void chase() {
+	public void chase() {
 		
 		double speedX = (getTarget().getX() - x);
 		double speedY = (getTarget().getY() - y);
@@ -67,22 +75,29 @@ public class Enemy extends StatObject{
 			} 
 			
 		}
+		else{
+			setTarget(null);
+			//System.out.println("o");
+		}
+		
 		if(xDirecional > xAnterior && xDirecional != target.getX()){
 			right = true;
+			tempDirection = 1;
 			
 		}
 		else if(xDirecional < xAnterior && xDirecional!= target.getX()){
 			left = true;
-			
+			tempDirection = 2;
 		}
 		
 		else if(yDirecional > yAnterior && yDirecional != target.getY()){
 			down = true;
+			tempDirection = 3;
 			
 		}
 		else if(yDirecional < yAnterior && yDirecional != target.getY()){
 			up = true;
-			
+			tempDirection = 4;
 		}
 	}
 	public void setTarget(StatObject go) {
@@ -110,14 +125,29 @@ public class Enemy extends StatObject{
 	public void setSightRange(float dist){
 		this.sightRange = dist;
 	}
-	protected void look() {
+	public void attack(){
+		if(getTarget().getCurrentHealth() > 0){
+			getTarget().damage(getAttackDamage());
+		//	System.out.println("Health of Player:"+getTarget().getCurrentHealth() + "/" + getTarget().getMaxHealth());
+			attackDelay.restart();
+		}
+	}
+	public void look() {
+		//System.out.println("are you looking?");
+		tempDirection = 0;
 		ArrayList<MapObject> objects=  GamePanel.sphereCollide((float)x, (float)y, sightRange);
 		for(MapObject go : objects){
 			if(go.getType() == PLAYER_ID)
 			 setTarget((StatObject)go);
 		}
+		
 	}
 	public void draw(Graphics2D g){
 		super.draw(g);
+		//System.out.println("ccc");
+		g.setColor(titleColor);
+		g.setFont(titleFont);
+		g.drawString(getCurrentHealth()+" / "+getMaxHealth(), (int)getX()-12 , (int)getY()-20);
+		g.setFont(font);
 	}
 }
