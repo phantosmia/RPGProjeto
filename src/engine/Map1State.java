@@ -89,6 +89,9 @@ public class Map1State extends GameState{
 			player.setDown(true);
 			player.setMoving(true);
 		}
+		if(k == KeyEvent.VK_SPACE){
+			player.attack();
+		}
 		}
 		
 	}

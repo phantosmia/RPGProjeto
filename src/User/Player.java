@@ -8,17 +8,32 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import Enemies.Enemy;
 import Mobs.Creature;
+
+import Util.Stats;
+import Util.Util;
+import engine.Delay;
+
+import engine.GamePanel;
+import engine.MapObject;
+
 
 
 
 public class Player extends Creature{
 	
 	public int currentAction = -1;
+	
 	//private static final int IDLE = 0;
 	private static final int WALKINGRIGHT = 2;
 	private static final int WALKINGLEFT = 1;
 	private static final int WALKINGDOWN = 0;
+	public static final int FORWARD = 0;
+	public static final int BACKWARD = 1;
+	public static final int LEFT = 2;
+	public static final int RIGHT = 3;
+	public int facingDirection;
 	private boolean isMoving = false;
 	public boolean isMoving() {
 		return isMoving;
@@ -37,11 +52,14 @@ public class Player extends Creature{
 	
 };
 	public Player(){
+		ATTACK_RANGE = 49;
+		damage = 1;
+		attackDelay = new Delay(500);
 		deadSprite = new BufferedImage[1];
 		width = 32;
 		height = 32;
 		setType(2);
-		stats = new Util.Stats(1, true);
+		stats = new Stats(1, true);
 		idleRightSprite = new BufferedImage[1];
 		idleLeftSprite = new BufferedImage[1];
 		idleUpSprite = new BufferedImage[1];
@@ -73,8 +91,42 @@ public class Player extends Creature{
 		animation = new Animation();
 		animation.setFrames(idleDownSprite);
 		animation.setDelay(160);
+		attackDelay.terminate();
 	}
-	
+	public void attack() {
+		System.out.println("We are attacking");
+		ArrayList<MapObject> objects = new ArrayList<MapObject>();
+		attackDelay.restart();
+		if (facingDirection == FORWARD)
+			objects = GamePanel.rectangleCollide(x, y, x + 30, y + ATTACK_RANGE);
+		else if (facingDirection == BACKWARD)
+			objects = GamePanel.rectangleCollide(x, y - ATTACK_RANGE + 30, x + 30, y);
+		else if (facingDirection == LEFT)
+			objects = GamePanel.rectangleCollide(x - ATTACK_RANGE + 30, y, x, y + 30);
+		else if (facingDirection == RIGHT)
+			objects = GamePanel.rectangleCollide(x, y, x + ATTACK_RANGE, y + 30);
+		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+		for (MapObject go : objects) {
+			if (go.getType() == ENEMY_ID) {
+				enemies.add((Enemy) go);
+			}
+		}
+		if (enemies.size() > 0) {
+			Enemy target = enemies.get(0);
+			if (enemies.size() > 1) {
+				for (Enemy e : enemies) {
+					if (Util.dist(x, y, e.getX(), e.getY()) < Util.dist(x, y, target.getX(), target.getY()))
+						target = e;
+
+				}
+			}
+			target.damage(damage);
+			System.out.println(target.getCurrentHealth() + "/" + target.getMaxHealth());
+		} else {
+			System.out.println("No target");
+		}
+		attackDelay.restart();
+	}
 	public void draw(Graphics2D g){
 		
 		super.draw(g);
@@ -89,23 +141,27 @@ public class Player extends Creature{
 		if(left){
 			x -= 1;
 			tempDirection = 1;
+			facingDirection = LEFT;
 		}
 		if(right){
 			x += 1;
 			tempDirection = 2;
+			facingDirection = RIGHT;
 		}
 		if(down){
 			y += 1;
 			tempDirection = 3;
+			facingDirection = BACKWARD;
 		
 			
 		}
 		if(up){
 			y -= 1;
 			tempDirection = 4;
+			facingDirection = FORWARD;
 		}
 	}
-
+	
 	public void update() {
 		super.update();
 		if (!isDead) {

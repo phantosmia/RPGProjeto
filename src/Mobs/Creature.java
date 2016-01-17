@@ -8,6 +8,7 @@ import java.util.List;
 
 
 import Util.StatObject;
+import engine.Delay;
 import gameItens.Ability;
 import gameItens.Inventario;
 
@@ -31,6 +32,9 @@ private String nameIndividual; // nome individual da criatura ou do personagem
 public Class classe;
 protected Color titleColor;
 protected Font titleFont;
+protected Delay attackDelay;
+protected int damage;
+protected float ATTACK_RANGE;
 protected Font font;
 private int xpGrantedIfKilled; //xp que dara para o oponente caso seja morto
 private boolean canBeKilled; // se eh um npc importante para uma quest, nao pode ser morto
@@ -42,8 +46,7 @@ public void update(){
 	if (stats.getCurrentHealth() <= 0){
 		die();
 		isDead = true;
-		animation.setFrames(deadSprite);
-		
+		animation.setFrames(deadSprite); 
 	}
 }
 

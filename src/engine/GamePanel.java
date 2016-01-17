@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import Util.Physics;
 import Util.Util;
 
 
@@ -36,7 +37,17 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
 		}
 		return res;
 	}
-
+	public static ArrayList<MapObject> rectangleCollide(double x, double y, double d, double e) {
+		ArrayList<MapObject> res = new ArrayList<MapObject>();
+		double sx = d - x;
+		double sy = e - y;
+		Rectangle collider = new Rectangle((int) x, (int) y, (int) sx, (int) sy);
+		for (MapObject go : game.getObjects()) {
+			if (Physics.checkCollision(collider, go) != null)
+				res.add(go);
+		}
+		return res;
+	}
 	private ArrayList<MapObject> objects;
 	public GamePanel(){
 		super();

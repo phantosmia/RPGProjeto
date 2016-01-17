@@ -14,12 +14,12 @@ import engine.GamePanel;
 import engine.MapObject;
 public class Enemy extends Creature{
 	protected float sightRange;
-	protected float ATTACK_RANGE;
+	
 	protected StatObject target;
-	protected int damage;
+	
 	double xDirecional;
 	double yDirecional;
-	protected Delay attackDelay;
+	
 	protected int countDown;
 	protected int countUp;
 	protected int countLeft;
