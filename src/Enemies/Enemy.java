@@ -20,7 +20,7 @@ public class Enemy extends Creature{
 	double xDirecional;
 	double yDirecional;
 	protected Delay attackDelay;
-	int tempDirection = 0;
+	
 	public static final float DAMPING = 0.5f;
 	protected int attackDamage;
 	public int type;

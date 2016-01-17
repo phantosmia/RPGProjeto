@@ -73,17 +73,21 @@ public class Map1State extends GameState{
 		if(player.isDead == false){
 		if(k == KeyEvent.VK_LEFT){
 			player.setLeft(true);
+			player.setMoving(true);
+			
 		}
 		if(k == KeyEvent.VK_RIGHT){
 			player.setRight(true);
+			player.setMoving(true);
 		}
 		if(k == KeyEvent.VK_UP){
 			player.setUp(true);
-		
+			player.setMoving(true);
 		}
 		
 		if(k == KeyEvent.VK_DOWN){
 			player.setDown(true);
+			player.setMoving(true);
 		}
 		}
 		
@@ -95,15 +99,20 @@ public class Map1State extends GameState{
 		
 		if(k == KeyEvent.VK_LEFT){
 			player.setLeft(false);
+			player.setMoving(false);
+			
 		}
 		if(k == KeyEvent.VK_RIGHT){
 			player.setRight(false);
+			player.setMoving(false);
 		}
 		if(k == KeyEvent.VK_UP){
 			player.setUp(false);
+			player.setMoving(false);
 		}
 		if(k == KeyEvent.VK_DOWN){
 			player.setDown(false);
+			player.setMoving(false);
 		}
 		
 	}

@@ -14,11 +14,20 @@ import Mobs.Creature;
 
 public class Player extends Creature{
 	
-	public int currentAction;
-	private static final int IDLE = 0;
+	public int currentAction = -1;
+	//private static final int IDLE = 0;
 	private static final int WALKINGRIGHT = 2;
 	private static final int WALKINGLEFT = 1;
 	private static final int WALKINGDOWN = 0;
+	private boolean isMoving = false;
+	public boolean isMoving() {
+		return isMoving;
+	}
+
+	public void setMoving(boolean isMoving) {
+		this.isMoving = isMoving;
+	}
+
 	private static final int WALKINGUP = 3;
 	
 	private ArrayList<BufferedImage[]> sprites;
@@ -33,11 +42,18 @@ public class Player extends Creature{
 		height = 32;
 		setType(2);
 		stats = new Util.Stats(1, true);
-		
+		idleRightSprite = new BufferedImage[1];
+		idleLeftSprite = new BufferedImage[1];
+		idleUpSprite = new BufferedImage[1];
+		idleDownSprite = new BufferedImage[1];
 		font = new Font("Arial", Font.PLAIN, 12);
 		titleColor = new Color(128, 0, 0);
 		titleFont = new Font("Century Gothic", Font.PLAIN, 12);
 		try {
+			idleRightSprite[0] = ImageIO.read(getClass().getResourceAsStream("/Characters/beren_idle_right.png"));
+			idleLeftSprite[0] = ImageIO.read(getClass().getResourceAsStream("/Characters/beren_idle_left.png"));
+			idleUpSprite[0] = ImageIO.read(getClass().getResourceAsStream("/Characters/beren_idle_up.png"));
+			idleDownSprite[0] = ImageIO.read(getClass().getResourceAsStream("/Characters/beren_idle_down.png"));
 			deadSprite[0] = ImageIO.read(getClass().getResourceAsStream("/Characters/gravestone.png"));
 			BufferedImage spritesheet = ImageIO
 					.read(getClass().getResourceAsStream("/Characters/beren.png"));
@@ -55,9 +71,10 @@ public class Player extends Creature{
 			e.printStackTrace();
 		}
 		animation = new Animation();
-		currentAction = WALKINGDOWN;
-		animation.setFrames(sprites.get(WALKINGDOWN));
-		animation.setDelay(500);
+	//	currentAction = WALKINGDOWN;
+	//	animation.setFrames(sprites.get(WALKINGDOWN));
+		animation.setFrames(idleDownSprite);
+		animation.setDelay(160);
 	}
 	
 	public void draw(Graphics2D g){
@@ -73,15 +90,21 @@ public class Player extends Creature{
 	private void getNextPosition() {
 		if(left){
 			x -= 1;
+			tempDirection = 1;
 		}
 		if(right){
 			x += 1;
+			tempDirection = 2;
 		}
 		if(down){
 			y += 1;
+			tempDirection = 3;
+		
+			
 		}
 		if(up){
 			y -= 1;
+			tempDirection = 4;
 		}
 	}
 
@@ -90,7 +113,7 @@ public class Player extends Creature{
 		if (!isDead) {
 			getNextPosition();
 			setPosition(x, y);
-
+			
 			if (left) {
 				if (currentAction != WALKINGLEFT) {
 					currentAction = WALKINGLEFT;
@@ -114,6 +137,7 @@ public class Player extends Creature{
 					animation.setFrames(sprites.get(WALKINGUP));
 					animation.setDelay(160);
 					width = 30;
+				
 
 				}
 			} else if (down) {
@@ -122,15 +146,25 @@ public class Player extends Creature{
 					animation.setFrames(sprites.get(WALKINGDOWN));
 					animation.setDelay(160);
 					width = 30;
-
+					System.out.println("hf");
 				}
+				
 			} else {
-				if (currentAction != IDLE) {
-					currentAction = IDLE;
-					animation.setFrames(sprites.get(IDLE));
+				currentAction = -1;
+				if(!isMoving){
+					if(tempDirection == 1)
+						animation.setFrames(idleLeftSprite);
+					else if(tempDirection == 2)
+						animation.setFrames(idleRightSprite);
+					else if(tempDirection == 3)
+						animation.setFrames(idleDownSprite);
+					else if(tempDirection == 4)
+						animation.setFrames(idleUpSprite);
+					
 					animation.setDelay(400);
 					width = 30;
 				}
+				
 			}
 			animation.update();
 		}

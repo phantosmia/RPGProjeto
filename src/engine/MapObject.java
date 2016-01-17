@@ -10,6 +10,7 @@ public abstract class MapObject {
 	protected boolean right;
 	protected boolean up;
 	protected boolean down;
+	public int tempDirection = 0;
 	public Animation animation;
 	public int width;
 	public int height;
