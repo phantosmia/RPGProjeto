@@ -20,7 +20,11 @@ public class Enemy extends Creature{
 	double xDirecional;
 	double yDirecional;
 	protected Delay attackDelay;
-	
+	protected int countDown;
+	protected int countUp;
+	protected int countLeft;
+	protected int countRight;
+	protected boolean isChasing = false;
 	public static final float DAMPING = 0.5f;
 	protected int attackDamage;
 	public int type;
@@ -77,6 +81,8 @@ public class Enemy extends Creature{
 		}
 		else{
 			setTarget(null);
+			isChasing = false;
+			up = true;
 			//System.out.println("o");
 		}
 		
@@ -137,8 +143,10 @@ public class Enemy extends Creature{
 		tempDirection = 0;
 		ArrayList<MapObject> objects=  GamePanel.sphereCollide((float)x, (float)y, sightRange);
 		for(MapObject go : objects){
-			if(go.getType() == PLAYER_ID)
+			if(go.getType() == PLAYER_ID){
 			 setTarget((StatObject)go);
+			 isChasing = true;
+			 }
 		}
 		
 	}

@@ -71,8 +71,6 @@ public class Player extends Creature{
 			e.printStackTrace();
 		}
 		animation = new Animation();
-	//	currentAction = WALKINGDOWN;
-	//	animation.setFrames(sprites.get(WALKINGDOWN));
 		animation.setFrames(idleDownSprite);
 		animation.setDelay(160);
 	}
@@ -146,7 +144,6 @@ public class Player extends Creature{
 					animation.setFrames(sprites.get(WALKINGDOWN));
 					animation.setDelay(160);
 					width = 30;
-					System.out.println("hf");
 				}
 				
 			} else {
