@@ -94,7 +94,7 @@ public class Player extends Creature{
 		attackDelay.terminate();
 	}
 	public void attack() {
-		System.out.println("We are attacking");
+		
 		ArrayList<MapObject> objects = new ArrayList<MapObject>();
 		attackDelay.restart();
 		if (facingDirection == FORWARD)
@@ -120,10 +120,9 @@ public class Player extends Creature{
 
 				}
 			}
-			target.damage(damage);
-			System.out.println(target.getCurrentHealth() + "/" + target.getMaxHealth());
-		} else {
-			System.out.println("No target");
+			if(target.getCurrentHealth() > 0)
+				target.damage(damage);
+			
 		}
 		attackDelay.restart();
 	}
